@@ -18,6 +18,7 @@ SharePoint サイトページ ──(Microsoft Graph / 定期同期)──▶ da
 |---|---|
 | `app/sharepoint.py` | Graph API でサイトページを取得し、本文テキスト(見出し・箇条書き付き)を抽出 |
 | `app/index.py` | ページを見出し単位のチャンクに分割し、BM25(日本語は文字 bi-gram)で検索 |
+| `app/check.py` | SharePoint 接続設定の確認ツール |
 | `app/sync.py` | 同期処理。更新日時が変わったページだけ再取得する |
 | `app/chat.py` | プロンプトを組み立て、Claude で回答を生成 |
 | `app/main.py` | Web サーバー(`/api/chat` と画面)。起動中は定期的に自動同期 |
@@ -52,7 +53,15 @@ pip install -r requirements.txt
 cp .env.example .env               # .env を編集して各値を設定
 ```
 
-### 4. 同期と起動
+### 4. 接続確認
+
+```bash
+python -m app.check
+```
+
+トークン取得 → 権限 → サイト → ページ一覧 → 本文抽出 の順に確認し、失敗した場合は原因の候補を表示します(データは保存しません)。
+
+### 5. 同期と起動
 
 ```bash
 python -m app.sync                 # SharePoint から FAQ を取り込む(初回)
