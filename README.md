@@ -76,6 +76,41 @@ Azure の設定をする前に動作を試したい場合は、サンプルの F
 python -m app.sync --sample
 ```
 
+## Docker Desktop で動かす
+
+Python のインストールは不要です。Docker Desktop を起動した状態で、リポジトリのフォルダで実行します。
+
+```bash
+cp .env.example .env               # .env を編集して各値を設定(Windows は copy .env.example .env)
+docker compose build
+
+# SharePoint 接続確認
+docker compose run --rm faq-chat python -m app.check
+
+# 起動(起動直後に SharePoint から自動同期されます)
+docker compose up -d
+docker compose logs -f             # 「同期完了: N ページ」が出れば準備完了
+```
+
+ブラウザで http://localhost:8000 を開きます。取り込んだ FAQ は Docker ボリューム `faq-data` に保存されるため、コンテナを作り直しても残ります。
+
+| 操作 | コマンド |
+|---|---|
+| 手動で再同期 | `docker compose run --rm faq-chat python -m app.sync` |
+| サンプル FAQ で試す | `.env` で `SYNC_INTERVAL_MINUTES=0` にしてから `docker compose run --rm faq-chat python -m app.sync --sample` |
+| `.env` の変更を反映 | `docker compose up -d`(コンテナが作り直されます) |
+| コードの変更を反映 | `docker compose up -d --build` |
+| 停止 | `docker compose down`(FAQ データも消す場合は `-v`) |
+
+**社内プロキシで `CERTIFICATE_VERIFY_FAILED` が出る場合**: SSL 検査をするプロキシの環境では、ビルド中の `pip install` やコンテナからの API 接続で証明書エラーになることがあります。情報システム部門から社内ルート証明書を入手し、`Dockerfile` の `FROM` の直後に次の行を追加して再ビルドしてください。
+
+```dockerfile
+COPY corp-ca.crt /usr/local/share/ca-certificates/corp-ca.crt
+ENV PIP_CERT=/usr/local/share/ca-certificates/corp-ca.crt \
+    SSL_CERT_FILE=/usr/local/share/ca-certificates/corp-ca.crt \
+    REQUESTS_CA_BUNDLE=/usr/local/share/ca-certificates/corp-ca.crt
+```
+
 ## 主な設定(.env)
 
 | 変数 | 既定値 | 説明 |

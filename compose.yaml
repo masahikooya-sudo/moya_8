@@ -1,0 +1,15 @@
+services:
+  faq-chat:
+    build: .
+    image: faq-chat
+    env_file: .env
+    environment:
+      DATA_DIR: /app/data
+    ports:
+      - "8000:8000"
+    volumes:
+      - faq-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  faq-data:
