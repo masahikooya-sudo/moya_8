@@ -1,0 +1,7 @@
+anthropic>=1.12,<2
+fastapi>=0.115
+uvicorn[standard]>=0.30
+msal>=1.30
+requests>=2.32
+beautifulsoup4>=4.12
+python-dotenv>=1.0

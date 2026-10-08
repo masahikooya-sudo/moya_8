@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>社内FAQチャット</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>社内FAQチャット</h1>
+    <button id="reset" type="button" title="会話をリセット">新しい質問</button>
+  </header>
+
+  <main id="log" aria-live="polite">
+    <div class="welcome">
+      <p>社内FAQマニュアルの内容をもとにお答えします。知りたいことを入力してください。</p>
+      <div class="examples">
+        <button type="button" class="example">有給休暇の申請方法は？</button>
+        <button type="button" class="example">経費精算の締め日はいつ？</button>
+        <button type="button" class="example">パスワードを忘れたときは？</button>
+      </div>
+    </div>
+  </main>
+
+  <form id="form" class="composer">
+    <textarea id="input" rows="1" maxlength="2000" placeholder="質問を入力(Enterで送信 / Shift+Enterで改行)" required></textarea>
+    <button id="send" type="submit">送信</button>
+  </form>
+  <p class="note">回答はAIが生成しています。重要な手続きは必ずリンク先のFAQ原文をご確認ください。</p>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
